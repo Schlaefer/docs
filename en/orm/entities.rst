@@ -164,7 +164,8 @@ Validation Errors
 
 .. php:method:: errors($field = null, $errors = null)
 
-After you :ref:`save an entity <saving-entities>` any validation errors will be
+After you :ref:`save an entity <saving-entities>` or
+:ref:`validate an entity <validation-entities>` any validation errors will be
 stored on the entity itself. You can access any validation errors using the
 ``errors()`` method::
 

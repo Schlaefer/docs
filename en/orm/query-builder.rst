@@ -706,49 +706,6 @@ provide the datatypes for each column in the join conditions. By providing
 datatypes for the join conditions, the ORM can correctly convert data types into
 SQL.
 
-Inserting Data
-==============
-
-Unlike earlier examples, you should not use ``find()`` to create insert queries.
-Instead, create a new ``Query`` object using ``query()``::
-
-    $query = $articles->query();
-    $query->insert(['title', 'body'])
-        ->values([
-            'title' => 'First post',
-            'body' => 'Some body text'
-        ])
-        ->execute();
-
-Generally, it is easier to insert data using entities and
-:php:meth:`~Cake\\ORM\\Table::save()`. By composing a ``SELECT`` and
-``INSERT`` query together, you can create ``INSERT INTO ... SELECT`` style
-queries::
-
-    $select = $articles->find()
-        ->select(['title', 'body', 'published'])
-        ->where(['id' => 3]);
-
-    $query = $articles->query()
-        ->insert(['title', 'body', 'published'])
-        ->values($select)
-        ->execute();
-
-Updating Data
-=============
-
-As with insert queries, you should not use ``find()`` to create update queries.
-Instead, create new a ``Query`` object using ``query()``::
-
-    $query = $articles->query();
-    $query->update()
-        ->set(['published' => true])
-        ->where(['id' => $id])
-        ->execute();
-
-Generally, it is easier to update data using entities and
-:php:meth:`~Cake\\ORM\\Table::patchEntity()`.
-
 Deleting Data
 =============
 
