@@ -10,8 +10,9 @@ Saving Entities
 
 .. php:method:: save(Entity $entity, array $options = [])
 
-When saving request data to your database you need to first hydrate a new entity
-using ``newEntity()`` for passing into ``save()``. For example::
+When saving request data to your database you need to first :ref:`convert the
+request data into a new entity<converting-request-data>` (hydrating the entity)
+using ``newEntity()``. Then this entity is passed into ``save()``. For example::
 
   // In a controller
   $articles = TableRegistry::get('Articles');
@@ -20,18 +21,18 @@ using ``newEntity()`` for passing into ``save()``. For example::
       // ...
   }
 
-The ORM uses the ``isNew()`` method on an entity to determine whether or not an
-insert or update should be performed. If the ``isNew()`` method returns ``null``
-and the entity has a primary key value, an 'exists' query will be issued.
-
-Once you've loaded some entities you'll probably want to modify them and update
-your database. This is a pretty simple exercise in CakePHP::
+If you want to modify a loaded entity and update it in the database this is a pretty
+simple exercise in CakePHP::
 
     $articles = TableRegistry::get('Articles');
     $article = $articles->find('all')->where(['id' => 2])->first();
 
     $article->title = 'My new title';
     $articles->save($article);
+
+The ORM uses the ``isNew()`` method on an entity to determine whether or not an
+insert or update should be performed. If the ``isNew()`` method returns ``null``
+and the entity has a primary key value, an 'exists' query will be issued.
 
 When saving, CakePHP will apply your validation rules, and wrap the save operation
 in a database transaction. It will also only update properties that have
@@ -97,17 +98,17 @@ used. A sample validator method for our articles table would be::
     }
 
 You can have as many validation sets as you need. See the :doc:`validation
-    chapter </core-libraries/validation>` for more information on building
-    validation rule-sets.
+chapter </core-libraries/validation>` for more information on building
+validation rule-sets.
 
-    Validation rules can use functions defined on any known providers. By default
-    CakePHP sets up a few providers:
+Validation rules can use functions defined on any known providers. By default
+CakePHP sets up a few providers:
 
-    1. Methods on the table class, or its behaviors are available on the ``table``
-   provider.
+1. Methods on the table class, or its behaviors are available on the ``table``
+provider.
 2. Methods on the entity class, are available on the ``entity`` provider.
 3. The core :php:class:`~Cake\\Validation\\Validation` class is setup as the
-   ``default`` provider.
+``default`` provider.
 
 When a validation rule is created you can name the provider of that rule. For
 example, if your entity had a 'isValidRole' method you could use it as
@@ -715,7 +716,7 @@ Saving Data using Query
 Inserting Data
 --------------
 
-Unlike earlier examples, you should not use ``find()`` to create insert queries.
+Unlike other query operations, you should not use ``find()`` to create insert queries.
 Instead, create a new ``Query`` object using ``query()``::
 
     $query = $articles->query();
@@ -726,10 +727,11 @@ Instead, create a new ``Query`` object using ``query()``::
         ])
         ->execute();
 
-Generally, it is easier to insert data using entities and
-:php:meth:`~Cake\\ORM\\Table::save()`. By composing a ``SELECT`` and
-``INSERT`` query together, you can create ``INSERT INTO ... SELECT`` style
-queries::
+Generally, it is easier to insert data :ref:`saving entities <saving-entities>`
+using :php:meth:`~Cake\\ORM\\Table::save()`.
+
+By composing a ``SELECT`` and ``INSERT`` query together, you can create ``INSERT
+INTO ... SELECT`` style queries::
 
     $select = $articles->find()
         ->select(['title', 'body', 'published'])
@@ -744,7 +746,7 @@ Updating Data
 -------------
 
 As with insert queries, you should not use ``find()`` to create update queries.
-Instead, create new a ``Query`` object using ``query()``::
+Instead, create a new ``Query`` object using ``query()``::
 
     $query = $articles->query();
     $query->update()
@@ -752,6 +754,6 @@ Instead, create new a ``Query`` object using ``query()``::
         ->where(['id' => $id])
         ->execute();
 
-Generally, it is easier to update data using entities and
-:php:meth:`~Cake\\ORM\\Table::patchEntity()`.
+Generally, it is easier to update data :ref:`updating entities <saving-entities>`
+using :php:meth:`~Cake\\ORM\\Table::patchEntity()`.
 
